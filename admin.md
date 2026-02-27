@@ -1,51 +1,79 @@
-# Admin Use Case Diagram
+# Admin Use Case Diagram (UML Style)
 
-## AI-Enhanced Quiz Management System (Admin Scope)
+This version is in the same formal style as your sample: one actor, system boundary, use-case ovals, and correct `<<include>>` / `<<extend>>` relations.
 
-```mermaid
-flowchart LR
-    A["Admin"]
+```plantuml
+@startuml
+left to right direction
+skinparam packageStyle rectangle
 
-    subgraph SYS["AI-Enhanced Quiz Management System"]
-        L(["Login / Authenticate"])
-        T(["Two-Factor Authentication"])
-        R(["Reset Password"])
-        P(["Manage Profile"])
-        U(["Manage User Accounts"])
-        C(["Manage Courses / Categories"])
-        S(["Monitor System Security"])
-        V(["View Audit Logs"])
-        G(["Generate Global Analytics"])
-    end
+actor Admin
 
-    %% Association (actor participates in use case)
-    A --- L
-    A --- P
-    A --- U
-    A --- C
-    A --- S
-    A --- G
+rectangle "AI-Enhanced Quiz Management System" {
 
-    %% UML relationships between use cases
-    T -. "extend" .-> L
-    R -. "extend" .-> L
-    S -. "include" .-> V
+    usecase "Login / Authenticate" as UC_Login
+    usecase "Two-Factor Authentication" as UC_2FA
+    usecase "Reset Password" as UC_Reset
+    usecase "Manage Profile" as UC_Profile
+
+    usecase "Manage User Accounts" as UC_UserAccounts
+    usecase "Create User Account" as UC_CreateUser
+    usecase "Update User Account" as UC_UpdateUser
+    usecase "Deactivate User Account" as UC_DeactivateUser
+
+    usecase "Manage Courses / Categories" as UC_CourseMgmt
+    usecase "Create Course / Category" as UC_CreateCourse
+    usecase "Update Course / Category" as UC_UpdateCourse
+    usecase "Archive Course / Category" as UC_ArchiveCourse
+
+    usecase "Monitor System Security" as UC_Security
+    usecase "View Audit Logs" as UC_Audit
+    usecase "Track Login Attempts & IP Events" as UC_TrackEvents
+
+    usecase "Generate Global Analytics" as UC_Analytics
+    usecase "View System Usage Trends" as UC_UsageTrends
+    usecase "View Institution Pass/Fail Rates" as UC_PassFail
+}
+
+' Actor associations (plain association links)
+Admin -- UC_Login
+Admin -- UC_Profile
+Admin -- UC_UserAccounts
+Admin -- UC_CourseMgmt
+Admin -- UC_Security
+Admin -- UC_Analytics
+
+' Extend relationships (optional / conditional)
+UC_2FA ..> UC_Login : <<extend>>
+UC_Reset ..> UC_Login : <<extend>>
+
+' Include relationships (mandatory decomposed behavior)
+UC_UserAccounts ..> UC_CreateUser : <<include>>
+UC_UserAccounts ..> UC_UpdateUser : <<include>>
+UC_UserAccounts ..> UC_DeactivateUser : <<include>>
+
+UC_CourseMgmt ..> UC_CreateCourse : <<include>>
+UC_CourseMgmt ..> UC_UpdateCourse : <<include>>
+UC_CourseMgmt ..> UC_ArchiveCourse : <<include>>
+
+UC_Security ..> UC_Audit : <<include>>
+UC_Security ..> UC_TrackEvents : <<include>>
+
+UC_Analytics ..> UC_UsageTrends : <<include>>
+UC_Analytics ..> UC_PassFail : <<include>>
+
+@enduml
 ```
 
-## What each Admin use case means
+## Quick reading guide
 
-- **Login / Authenticate**: Admin signs in to access protected functions.
-- **Two-Factor Authentication (extend Login)**: Optional extra verification when security policy requires it.
-- **Reset Password (extend Login)**: Optional recovery path when login fails due to forgotten password.
-- **Manage Profile**: Update admin details such as name, email, and profile preferences.
-- **Manage User Accounts**: Create, update, deactivate Teacher and Student accounts.
-- **Manage Courses / Categories**: Organize subjects, departments, and quiz categories.
-- **Monitor System Security**: Observe suspicious activity and enforce security controls.
-- **View Audit Logs (included by Monitor Security)**: Mandatory part of security monitoring to inspect login attempts and IP events.
-- **Generate Global Analytics**: View institution-wide usage and pass/fail trends.
+- `Admin -- Use Case`: Admin participates in that functionality.
+- `<<include>>`: mandatory sub-function inside the parent use case.
+- `<<extend>>`: optional/conditional behavior added to a base use case.
 
-## Line meaning (important)
+## Why this is complete for Admin scope
 
-- **Admin to use case line (`---`)**: Association only; it shows participation, not sequence.
-- **`include` dashed arrow**: Mandatory reused behavior.
-- **`extend` dashed arrow**: Optional or conditional behavior.
+- Covers all common Admin-access functions (login/profile).
+- Covers governance tasks (users, courses/categories).
+- Covers security oversight (audit logs and event tracking).
+- Covers institutional reporting (global analytics, trends, pass/fail).

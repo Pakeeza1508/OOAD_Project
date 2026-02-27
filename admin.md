@@ -1,57 +1,45 @@
-@startuml
-title Admin Use Case Diagram - AI-Enhanced Quiz Management System
-left to right direction
-skinparam packageStyle rectangle
+# Admin Use Case Diagram (Markdown Preview)
 
-'========================
-' Actors
-'========================
-actor "Primary User" as PrimaryUser
-actor "Admin" as Admin
+## AI-Enhanced Quiz Management System
 
-' Generalization (Admin inherits common behavior of Primary User)
-PrimaryUser <|-- Admin
+```mermaid
+flowchart LR
+	%% Actors
+	PU[Primary User]
+	A[Admin]
 
-'========================
-' System Boundary
-'========================
-rectangle "AI-Enhanced Quiz Management System" {
+	%% System Boundary
+	subgraph SYS[AI-Enhanced Quiz Management System]
+		L((Login / Authenticate))
+		T((Two-Factor Authentication))
+		R((Reset Password))
+		P((Manage Profile))
 
-	' Common Use Cases
-	usecase "Login / Authenticate" as UC_Login
-	usecase "Two-Factor Authentication" as UC_2FA
-	usecase "Reset Password" as UC_ResetPwd
-	usecase "Manage Profile" as UC_Profile
+		U((Manage User Accounts))
+		C((Manage Courses / Categories))
+		S((Monitor System Security))
+		V((View Audit Logs))
+		G((Generate Global Analytics))
+	end
 
-	' Admin Use Cases
-	usecase "Manage User Accounts" as UC_UserAccounts
-	usecase "Manage Courses / Categories" as UC_Courses
-	usecase "Monitor System Security" as UC_Security
-	usecase "View Audit Logs" as UC_AuditLogs
-	usecase "Generate Global Analytics" as UC_GlobalAnalytics
-}
+	%% Generalization (Actor inheritance)
+	PU -. generalization .-> A
 
-'========================
-' Actor Associations
-'========================
-Admin --> UC_Login
-Admin --> UC_Profile
-Admin --> UC_UserAccounts
-Admin --> UC_Courses
-Admin --> UC_Security
-Admin --> UC_GlobalAnalytics
+	%% Actor Associations
+	A --> L
+	A --> P
+	A --> U
+	A --> C
+	A --> S
+	A --> G
 
-'========================
-' UML Relationships
-'========================
-UC_2FA ..> UC_Login : <<extend>>
-UC_ResetPwd ..> UC_Login : <<extend>>
-UC_Security ..> UC_AuditLogs : <<include>>
+	%% UML-style Relationships
+	T -. <<extend>> .-> L
+	R -. <<extend>> .-> L
+	S -. <<include>> .-> V
+```
 
-' Optional note to explain included behavior
-note right of UC_AuditLogs
-Tracks login attempts,
-IP addresses, and security events.
-end note
-
-@enduml
+### Legend
+- `<<include>>`: Mandatory sub-use-case.
+- `<<extend>>`: Optional/conditional behavior.
+- `generalization`: Admin inherits common behavior from Primary User.
